@@ -42,7 +42,7 @@ def construct_url(settings, start_ts='/'):
     url='http://api.trakt.tv/activity/user.json/'
     for p in parts:
         url = urljoin(url, p + '/');
-    return url
+    return url[:-1] + "?min=1"
 
 if __name__ == '__main__':
     main()
