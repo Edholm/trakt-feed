@@ -2,13 +2,18 @@
 
 import requests
 import json
+import sys
+from os.path import realpath, join, dirname
 from urllib.parse import urljoin
 from termcolor import colored
 
 def main():
     settings = None
     data     = None
-    with open("settings.json", "r") as f:
+    settings_file = join(dirname(realpath(__file__)), "settings.json")
+    query = " ".join(sys.argv[1:])
+
+    with open(settings_file, "r") as f:
         settings = json.loads(f.read())
 
     # FIXME: non-static timestamp
@@ -28,7 +33,7 @@ def main():
     ep    = lambda j: j['episodes'][0]['episode']
     time  = lambda j: j['timestamp']
     seen = sorted([(title(j), sea(j), ep(j), time(j))
-                   for j in data['activity']], key=lambda k: k[3])
+                   for j in data['activity'] if query in title(j).lower()], key=lambda k: k[3])
 
 
     for s in seen:
